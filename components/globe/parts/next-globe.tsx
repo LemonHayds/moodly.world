@@ -18,6 +18,7 @@ export default function NextGlobe() {
   const globeEl = useRef<any>();
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  console.log("isDark", isDark);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   const {
