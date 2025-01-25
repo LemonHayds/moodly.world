@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 
 const EmojiPicker = (props: { onEmojiClick: (moodId: string) => void }) => {
   const { onEmojiClick } = props;
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const [key, setKey] = useState(0);
   const [perLineCount, setPerLineCount] = useState(16);
 
@@ -76,7 +76,7 @@ const EmojiPicker = (props: { onEmojiClick: (moodId: string) => void }) => {
       skinTonePosition={"none"}
       noCountryFlags={true}
       className="bg-transparent opacity-15"
-      theme={theme === "dark" ? "dark" : "light"}
+      theme={resolvedTheme === "dark" ? "dark" : "light"}
       previewPosition={"none"}
     />
   );

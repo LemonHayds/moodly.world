@@ -155,14 +155,14 @@ export default function NextGlobe() {
     setIsHovering(!!polygon);
   }, []);
 
-  const handlePolygonClick = useCallback(() => {
+  const handlePolygonClick = () => {
     if (selectedCountry && !isModalOpen) {
       setIsModalOpen(true);
       document.body.style.cursor = "default";
     } else {
       setIsModalOpen(false);
     }
-  }, [selectedCountry, isModalOpen, setIsModalOpen]);
+  };
 
   // Add this new effect to handle dimensions
   useEffect(() => {
