@@ -62,7 +62,11 @@ const MoodLogger = (props: { className?: string }) => {
         return;
       }
 
-      const toastId = toast.loading("Logging", { id: "mood_log" });
+      const toastId = toast.loading("Logging", {
+        id: "mood_log",
+        className:
+          "w-fit bg-zinc-100/90 dark:bg-zinc-900/90 text-black dark:text-white backdrop-blur-sm",
+      });
       const previousMoodId = selectedMoodId;
 
       try {
