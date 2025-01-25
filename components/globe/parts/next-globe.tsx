@@ -16,9 +16,8 @@ import { GlobePopover } from "./globe-popover";
 
 export default function NextGlobe() {
   const globeEl = useRef<any>();
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
-  console.log("isDark", isDark);
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   const {
