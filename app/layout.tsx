@@ -14,7 +14,7 @@ import GlobeAnalyticsServerProvider from "../components/providers/globe-analytic
 const rubik = Rubik({ weight: "400", subsets: ["latin"] });
 
 const META_TITLE = "Moodly";
-const META_DESCRIPTION = "Visualise the world's moods with emojis, globally";
+const META_DESCRIPTION = "Visualize the world's moods with emojis globally.";
 
 export const metadata: Metadata = {
   title: META_TITLE,
