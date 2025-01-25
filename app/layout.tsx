@@ -1,14 +1,14 @@
-import "./globals.css";
 import { Rubik } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 
-import { ThemeProvider } from "../components/providers/theme-provider";
-import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-
-import GeoServerProvider from "../components/providers/geo-provider/geo-server-provider";
+import Navbar from "../components/navbar";
 import AuthServerProvider from "../components/providers/auth-provider/auth-server-provider";
+import GeoServerProvider from "../components/providers/geo-provider/geo-server-provider";
 import GlobeAnalyticsServerProvider from "../components/providers/globe-analytics-provider/globe-analytics-server-provider";
+import { ThemeProvider } from "../components/providers/theme-provider";
+
+import "./globals.css";
 
 import type { Metadata } from "next";
 
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   robots: {
     index: true,
-    follow: true,
+    follow: false,
   },
 };
 
