@@ -14,8 +14,6 @@ export async function GeoServerProvider({
   const city = headersList.get("x-vercel-ip-city") || "";
   const region = headersList.get("x-vercel-ip-region") || "";
 
-  console.log("Vercel:", { country, city, region });
-
   return (
     <GeoClientProvider country={country} city={city} region={region}>
       {children}
