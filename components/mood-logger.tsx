@@ -67,20 +67,20 @@ const MoodLogger = (props: { className?: string }) => {
 
       try {
         setSelectedMoodId(moodId);
-        const latestMoodLog = await storeMoodLogServer(moodId, geoData);
+        const response = await storeMoodLogServer(moodId, geoData);
 
-        if (latestMoodLog?.success && latestMoodLog?.log) {
-          setLatestMoodLog(latestMoodLog);
+        if (response.success && response.log) {
+          setLatestMoodLog(response);
           toast.success(
             <div className="flex items-center gap-2">
               Mood logged:
-              <span className="text-xl">{latestMoodLog.log.emoji}</span>
+              <span className="text-xl">{response.log.emoji}</span>
             </div>,
             { id: toastId }
           );
         } else {
           setSelectedMoodId(previousMoodId);
-          throw new Error("Failed to log mood");
+          throw new Error(response.error || "Failed to log mood");
         }
       } catch (error) {
         const errorMessage =

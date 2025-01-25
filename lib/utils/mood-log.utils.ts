@@ -15,8 +15,12 @@ export async function storeMoodLogServer(
   const {
     data: { session },
   } = await supabase.auth.getSession();
+
   if (!session?.user) {
-    throw new Error("You must be logged in to log your mood");
+    return {
+      success: false,
+      error: "You must be logged in to log your mood",
+    };
   }
 
   // Calculate timestamp from 24 hours ago
@@ -33,7 +37,10 @@ export async function storeMoodLogServer(
     .order("created_at", { ascending: true });
 
   if (fetchError) {
-    throw new Error("Failed to check update count");
+    return {
+      success: false,
+      error: "An error occured, please try again",
+    };
   }
 
   let success = true;
@@ -54,9 +61,11 @@ export async function storeMoodLogServer(
         Math.ceil((timeUntilReset.getTime() - Date.now()) / (1000 * 60)) % 60;
 
       success = false;
-      throw new Error(
-        `You've reached the maximum number of mood updates for today (${MAX_DAILY_UPDATES}). You can log your mood again in ${hoursRemaining}h ${minutesRemaining}m.`
-      );
+
+      return {
+        success,
+        error: `You've reached the maximum number of mood updates for today (${MAX_DAILY_UPDATES}). You can log your mood again in ${hoursRemaining}h ${minutesRemaining}m.`,
+      };
     }
   }
 
