@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import "./globals.css";
 import { Rubik } from "next/font/google";
 import { Toaster } from "react-hot-toast";
@@ -10,6 +9,8 @@ import Footer from "../components/footer";
 import GeoServerProvider from "../components/providers/geo-provider/geo-server-provider";
 import AuthServerProvider from "../components/providers/auth-provider/auth-server-provider";
 import GlobeAnalyticsServerProvider from "../components/providers/globe-analytics-provider/globe-analytics-server-provider";
+
+import type { Metadata } from "next";
 
 const rubik = Rubik({ weight: "400", subsets: ["latin"] });
 
