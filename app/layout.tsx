@@ -1,6 +1,6 @@
 import { Rubik } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-
+import { Analytics } from "@vercel/analytics/next";
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
 import AuthServerProvider from "../components/providers/auth-provider/auth-server-provider";
@@ -68,6 +68,7 @@ export default async function RootLayout({
               <GlobeAnalyticsServerProvider>
                 <Navbar />
                 {children}
+                <Analytics />
                 <Footer />
               </GlobeAnalyticsServerProvider>
             </GeoServerProvider>
