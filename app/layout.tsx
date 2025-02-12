@@ -1,6 +1,7 @@
+import { Analytics } from "@vercel/analytics/next";
 import { Rubik } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import { Analytics } from "@vercel/analytics/next";
+
 import Footer from "../components/footer";
 import Navbar from "../components/navbar";
 import AuthServerProvider from "../components/providers/auth-provider/auth-server-provider";
@@ -14,8 +15,8 @@ import type { Metadata } from "next";
 
 const rubik = Rubik({ weight: "400", subsets: ["latin"] });
 
-const META_TITLE = "Moodly";
-const META_DESCRIPTION = "Visualize the world's moods with emojis globally.";
+const META_TITLE = "Moodly | The World's Mood";
+const META_DESCRIPTION = "Visualize the world's mood with emojis globally.";
 
 export const metadata: Metadata = {
   title: META_TITLE,

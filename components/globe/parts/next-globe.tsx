@@ -96,7 +96,6 @@ export default function NextGlobe() {
     }
   }, [isHovering, globeSettings.spinningEnabled]);
 
-  // Every time globalMoods changes, generate new labels to display emojis on the globe
   useEffect(() => {
     if (!globeSettings.emojisEnabled) return;
 
@@ -141,7 +140,7 @@ export default function NextGlobe() {
     [selectedCountry, globeSettings.emojisEnabled]
   );
 
-  const handlePolygonHover = useCallback(async (polygon: any) => {
+  const handlePolygonHover = async (polygon: any) => {
     const countryPolygon = polygon as GlobePolygonType | null;
     if (countryPolygon?.properties?.ISO_A2) {
       document.body.style.cursor = "pointer";
@@ -153,9 +152,10 @@ export default function NextGlobe() {
     }
 
     setIsHovering(!!polygon);
-  }, []);
+  };
 
   const handlePolygonClick = () => {
+    console.log("clicked");
     if (selectedCountry && !isModalOpen) {
       setIsModalOpen(true);
       document.body.style.cursor = "default";

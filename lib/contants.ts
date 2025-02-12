@@ -12,7 +12,6 @@ export const FIVE_MINUTES_IN_SECONDS = 5 * 60;
 export const ONE_DAY_IN_SECONDS = 24 * 60 * 60;
 
 // Analytics Constants
-export const MAX_DAILY_UPDATES = Number(process.env.MAX_DAILY_UPDATES) || 10;
 export const ANALYTICS_FILTER_TABS = [
   { value: "1hr", label: "1hr" },
   { value: "24hr", label: "24hr" },
@@ -41,3 +40,6 @@ export const DEFAULT_GLOBE_SETTINGS: GlobeSettingsType = {
   spinningEnabled: true,
   emojisEnabled: true,
 };
+
+export const TOAST_CLASSNAMES =
+  "w-fit bg-zinc-100/90 dark:bg-zinc-900/90 text-black dark:text-white backdrop-blur-sm";

@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Add your animation here, after the Tailwind imports */
 @keyframes scaleInOut {
   0% {
     transform: scale(1);
@@ -17,6 +16,19 @@
 
 .no-blend {
   isolation: isolate;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
 }
 
 em-emoji-picker {

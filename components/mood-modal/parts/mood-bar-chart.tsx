@@ -75,11 +75,11 @@ export default function MoodBarChart() {
   return (
     <div className="-mt-2">
       {isFetchingCountryMoods ? (
-        <Loader size={20} />
+        <Loader size={20} className="mr-auto mt-5" />
       ) : (
         <>
           {!chartConfig || Object?.keys(chartConfig)?.length === 0 ? (
-            <span className="flex items-center gap-2">
+            <span className="flex items-center gap-2 opacity-50 mt-4">
               No data here <Frown className="h-5 w-5" />
             </span>
           ) : (
@@ -116,6 +116,7 @@ export default function MoodBarChart() {
                     dataKey="total"
                     radius={[0, 5, 5, 0]}
                     fill="currentColor"
+                    maxBarSize={30}
                   />
                 </BarChart>
               </ChartContainer>

@@ -19,8 +19,8 @@ import type { GlobeSettingsType } from "../../../lib/types/settings.types";
 import MoodModal from "../../mood-modal/mood-modal";
 
 type GlobeAnalyticsContextType = {
-  activeFilter: string;
-  setActiveFilter: (value: string) => void;
+  activeFilter: TimePeriodType;
+  setActiveFilter: (value: TimePeriodType) => void;
   countryMoods: CountryMoodsType | null;
   globalMoods: GlobalMoodsTypeWithEmoji | null;
   isFetchingGlobalMoods: boolean;
@@ -49,8 +49,8 @@ export function GlobeAnalyticsClientProvider({
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
-  const [activeFilter, setActiveFilter] = useState<string>(
-    DEFAULT_ANALYTICS_TIME_PERIOD.value
+  const [activeFilter, setActiveFilter] = useState<TimePeriodType>(
+    DEFAULT_ANALYTICS_TIME_PERIOD.value as TimePeriodType
   );
 
   const [isFetchingGlobalMoods, setIsFetchingGlobalMoods] = useState(false);
@@ -61,6 +61,7 @@ export function GlobeAnalyticsClientProvider({
   const [countryMoods, setCountryMoods] = useState<CountryMoodsType | null>(
     null
   );
+
   // Every time the modal is opened, fetch the specific country analytics using selected country and active filter
   useEffect(() => {
     if (!isModalOpen) {

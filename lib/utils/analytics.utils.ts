@@ -1,7 +1,7 @@
 "use server";
 
 import { SupabaseClient } from "@supabase/supabase-js";
-import { getEmojiById } from "../emoji.utils";
+import { getEmojiById } from "./emoji.server.utils";
 import type {
   AnalyticsDataType,
   GlobalMoodsType,
@@ -19,6 +19,7 @@ import {
 } from "../contants";
 import { createClient } from "./supabase/server";
 import { unstable_cache } from "next/cache";
+import { cache } from "react";
 
 // Create a new analytics row
 export async function createNewAnalyticsRow(
@@ -141,53 +142,55 @@ export async function calculateAnalytics(
   };
 }
 
-// Fetch global moods (most common mood for each country)
-export async function fetchGlobalMoodsByTimePeriod(
-  timePeriod: TimePeriodType
-): Promise<GlobalMoodsTypeWithEmoji | null> {
-  const supabase = createClient();
-  let globalMoods: GlobalMoodsTypeWithEmoji | null = null;
-  let attempts = 0;
-  const MAX_ATTEMPTS = 3;
+// Wrap the function in React cache
+export const fetchGlobalMoodsByTimePeriod = cache(
+  async (
+    timePeriod: TimePeriodType
+  ): Promise<GlobalMoodsTypeWithEmoji | null> => {
+    const supabase = createClient();
+    let globalMoods: GlobalMoodsTypeWithEmoji | null = null;
+    let attempts = 0;
+    const MAX_ATTEMPTS = 3;
 
-  console.log("Fetching global moods for time period:", timePeriod);
+    console.log("Fetching global moods for time period:", timePeriod);
 
-  while (attempts < MAX_ATTEMPTS) {
-    try {
-      switch (timePeriod) {
-        case "1hr":
-          globalMoods = await fetchGlobalMoodsLastHour(supabase);
-          break;
-        case "24hr":
-          globalMoods = await fetchGlobalMoodsLast24Hours(supabase);
-          break;
-        case "week":
-          globalMoods = await fetchGlobalMoodsLastWeek(supabase);
-          break;
-        case "month":
-          globalMoods = await fetchGlobalMoodsLastMonth(supabase);
-          break;
-        case "year":
-          globalMoods = await fetchGlobalMoodsLastYear(supabase);
-          break;
-      }
+    while (attempts < MAX_ATTEMPTS) {
+      try {
+        switch (timePeriod) {
+          case "1hr":
+            globalMoods = await fetchGlobalMoodsLastHour(supabase);
+            break;
+          case "24hr":
+            globalMoods = await fetchGlobalMoodsLast24Hours(supabase);
+            break;
+          case "week":
+            globalMoods = await fetchGlobalMoodsLastWeek(supabase);
+            break;
+          case "month":
+            globalMoods = await fetchGlobalMoodsLastMonth(supabase);
+            break;
+          case "year":
+            globalMoods = await fetchGlobalMoodsLastYear(supabase);
+            break;
+        }
 
-      if (globalMoods) {
-        return globalMoods;
-      }
+        if (globalMoods) {
+          return globalMoods;
+        }
 
-      attempts++;
-    } catch (error) {
-      attempts++;
-      if (attempts === MAX_ATTEMPTS) {
-        console.log("Failed to fetch country moods after 3 attempts", error);
-        return null;
+        attempts++;
+      } catch (error) {
+        attempts++;
+        if (attempts === MAX_ATTEMPTS) {
+          console.log("Failed to fetch country moods after 3 attempts", error);
+          return null;
+        }
       }
     }
-  }
 
-  return null;
-}
+    return null;
+  }
+);
 
 export const fetchGlobalMoodsLastHour = unstable_cache(
   async (supabase: SupabaseClient): Promise<GlobalMoodsTypeWithEmoji> => {
@@ -206,6 +209,7 @@ export const fetchGlobalMoodsLastHour = unstable_cache(
     );
 
     const globalMoods = transformAnalyticsToGlobalMoods(analytics);
+
     return addEmojiToGlobalMoods(globalMoods);
   },
   ["global-moods-hour"],
@@ -631,7 +635,7 @@ async function transformAnalyticsToCountryMoods(
     })
   );
 
-  return Promise.all(moodPromises);
+  return await Promise.all(moodPromises);
 }
 
 async function addEmojiToGlobalMoods(globalMoods: GlobalMoodsType) {

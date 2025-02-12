@@ -6,7 +6,9 @@ import { useTheme } from "next-themes";
 import { EmojiType } from "../lib/types/emoji.types";
 import { useState, useEffect } from "react";
 
-const EmojiPicker = (props: { onEmojiClick: (moodId: string) => void }) => {
+const EmojiPicker = (props: {
+  onEmojiClick: (moodId: { id: string; emoji: string }) => void;
+}) => {
   const { onEmojiClick } = props;
   const { resolvedTheme } = useTheme();
   const [key, setKey] = useState(0);
@@ -56,7 +58,7 @@ const EmojiPicker = (props: { onEmojiClick: (moodId: string) => void }) => {
 
         if (!emojiId || !onEmojiClick) return;
 
-        onEmojiClick(emojiId);
+        onEmojiClick({ id: emojiId, emoji: emoji.native });
       }}
       categories={[
         // "frequent",

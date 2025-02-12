@@ -27,7 +27,6 @@ export function GeoClientProvider({
     region,
   });
 
-  console.log("GeoData:", geoData);
   return (
     <GeoContext.Provider value={{ geoData, setGeoData }}>
       {children}
