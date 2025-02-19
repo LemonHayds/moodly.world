@@ -63,14 +63,17 @@ export function GlobeAnalyticsClientProvider({
     null
   );
 
-  const fetchCountryMoods = async () => {
+  const fetchCountryMoods = async (withDelay = false) => {
     setIsFetchingCountryMoods(true);
     setCountryMoods(null);
 
     const countryMoods = await fetchCountryMoodsByTimePeriod(
       activeFilter as TimePeriodType,
-      selectedCountry || ""
+      selectedCountry || "",
+      withDelay
     );
+
+    console.log("fetching after mood logged");
 
     if (countryMoods) {
       setCountryMoods(countryMoods);
@@ -126,7 +129,7 @@ export function GlobeAnalyticsClientProvider({
         setIsModalOpen,
         globeSettings,
         setGlobeSettings,
-        refetchCountryMoods: fetchCountryMoods,
+        refetchCountryMoods: () => fetchCountryMoods(true),
       }}
     >
       {children}

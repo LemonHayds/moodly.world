@@ -40,15 +40,20 @@ export async function login(formData: FormData) {
 
 export async function signInWithOAuth(type: "x" | "google" | "facebook") {
   const supabase = createClient();
+
+  const redirectTo =
+    process.env.APP_ENV === "local"
+      ? "http://localhost:3000"
+      : process.env.APP_ENV === "staging"
+      ? process.env.VERCEL_URL
+      : "https://www.moodly.world";
+
+  console.log("Sign in with auth:", redirectTo);
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: type === "x" ? "twitter" : type,
     options: {
-      redirectTo:
-        process.env.APP_ENV === "local"
-          ? "http://localhost:3000"
-          : process.env.APP_ENV === "staging"
-          ? process.env.VERCEL_URL
-          : "https://www.moodly.world",
+      redirectTo,
       queryParams: {
         access_type: "offline",
         prompt: "consent",
