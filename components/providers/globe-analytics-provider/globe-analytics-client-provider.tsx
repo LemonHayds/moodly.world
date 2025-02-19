@@ -105,9 +105,7 @@ export function GlobeAnalyticsClientProvider({
         activeFilter as TimePeriodType
       );
 
-      if (globalMoods) {
-        setGlobalMoods(globalMoods);
-      }
+      setGlobalMoods(globalMoods || null);
 
       setIsFetchingGlobalMoods(false);
     };
