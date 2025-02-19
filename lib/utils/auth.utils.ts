@@ -42,13 +42,13 @@ export async function signInWithOAuth(type: "x" | "google" | "facebook") {
   const supabase = createClient();
 
   const redirectTo =
-    process.env.APP_ENV === "local"
+    process.env.NEXT_PUBLIC_ENV === "local"
       ? "http://localhost:3000"
-      : process.env.APP_ENV === "staging"
-      ? process.env.VERCEL_URL
+      : process.env.NEXT_PUBLIC_ENV === "staging"
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
       : "https://www.moodly.world";
 
-  console.log("Sign in with auth:", redirectTo);
+  console.log("!!!Sign in with auth:", redirectTo);
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: type === "x" ? "twitter" : type,
