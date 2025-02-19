@@ -100,12 +100,11 @@ export function GlobeAnalyticsClientProvider({
 
     const fetchGlobalMoods = async () => {
       setIsFetchingGlobalMoods(true);
-      setGlobalMoods(null);
-      const globalMoods = await fetchGlobalMoodsByTimePeriod(
+      const newGlobalMoods = await fetchGlobalMoodsByTimePeriod(
         activeFilter as TimePeriodType
       );
 
-      setGlobalMoods(globalMoods || null);
+      setGlobalMoods(newGlobalMoods || null);
 
       setIsFetchingGlobalMoods(false);
     };

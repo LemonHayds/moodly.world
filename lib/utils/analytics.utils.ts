@@ -180,14 +180,13 @@ export const fetchGlobalMoodsByTimePeriod = cache(
             break;
         }
 
-        if (!globalMoods || Object?.keys(globalMoods)?.length === 0) {
-          console.log("❌ Empty global moods");
+        if (globalMoods && Object?.keys(globalMoods)?.length > 0) {
+          return globalMoods;
+        } else {
           revalidateTag(revalidateTagKey);
-          attempts++;
-          continue;
         }
 
-        return globalMoods;
+        attempts++;
       } catch (error) {
         attempts++;
         if (attempts === MAX_ATTEMPTS) {
@@ -379,17 +378,16 @@ export async function fetchCountryMoodsByTimePeriod(
           break;
       }
 
-      if (!countryMoods || Object?.keys(countryMoods)?.length === 0) {
-        console.log("❌ Empty country moods");
-        revalidateTag(revalidateTagKey);
+      if (countryMoods && countryMoods?.length > 0) {
+        return countryMoods;
+      } else {
         if (withDelay) {
-          await new Promise((resolve) => setTimeout(resolve, 500));
+          await new Promise((resolve) => setTimeout(resolve, 1000));
         }
-        attempts++;
-        continue;
+        revalidateTag(revalidateTagKey);
       }
 
-      return countryMoods;
+      attempts++;
     } catch (error) {
       attempts++;
       if (attempts === MAX_ATTEMPTS) {
