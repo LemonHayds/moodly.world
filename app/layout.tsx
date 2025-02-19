@@ -1,21 +1,22 @@
-import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 import { Rubik } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 
-import { ThemeProvider } from "../components/providers/theme-provider";
-import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-
-import GeoServerProvider from "../components/providers/geo-provider/geo-server-provider";
+import Navbar from "../components/navbar";
 import AuthServerProvider from "../components/providers/auth-provider/auth-server-provider";
+import GeoServerProvider from "../components/providers/geo-provider/geo-server-provider";
 import GlobeAnalyticsServerProvider from "../components/providers/globe-analytics-provider/globe-analytics-server-provider";
+import { ThemeProvider } from "../components/providers/theme-provider";
+
+import "./globals.css";
 
 import type { Metadata } from "next";
 
 const rubik = Rubik({ weight: "400", subsets: ["latin"] });
 
-const META_TITLE = "Moodly";
-const META_DESCRIPTION = "Visualize the world's moods with emojis globally.";
+const META_TITLE = "Moodly | The World's Mood";
+const META_DESCRIPTION = "Visualize the world's mood with emojis globally.";
 
 export const metadata: Metadata = {
   title: META_TITLE,
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
   },
   robots: {
     index: true,
-    follow: true,
+    follow: false,
   },
 };
 
@@ -68,6 +69,7 @@ export default async function RootLayout({
               <GlobeAnalyticsServerProvider>
                 <Navbar />
                 {children}
+                <Analytics />
                 <Footer />
               </GlobeAnalyticsServerProvider>
             </GeoServerProvider>

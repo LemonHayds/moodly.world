@@ -12,6 +12,6 @@ export type MoodLogType = {
 
 export type MoodResponseType = {
   success: boolean;
-  remainingUpdates: number;
-  log: MoodLogType & { emoji?: string };
+  log?: MoodLogType & { emoji?: string };
+  error?: string;
 };

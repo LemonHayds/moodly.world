@@ -1,7 +1,12 @@
 import { createServiceClient } from "@/lib/utils/supabase/service-role";
 import { NextResponse } from "next/server";
 
-import { calculateAnalytics, createNewAnalyticsRow, fetchLastProcessedAnalyticsTimestamp, fetchMoodLogs } from "../../../lib/utils/analytics.utils";
+import {
+  calculateAnalytics,
+  createNewAnalyticsRow,
+  fetchLastProcessedAnalyticsTimestamp,
+  fetchMoodLogs,
+} from "../../../lib/utils/analytics.utils";
 
 export const runtime = "edge";
 export const dynamic = "force-dynamic";
@@ -11,8 +16,8 @@ export async function GET(request: Request) {
   try {
     // Verify Cron request
     const authHeader = request.headers.get("authorization");
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET_KEY}`) {
-      console.log("❌ Unauthorized request - invalid CRON_SECRET_KEY");
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      console.log("❌ Unauthorized request - invalid CRON_SECRET");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

@@ -57,6 +57,11 @@ const config: Config = {
             "background-position": "calc(100% + var(--shiny-width)) 0",
           },
         },
+        "scale-in-out": {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.1)" },
+          "100%": { transform: "scale(1)" },
+        },
         progress: {
           "0%": { width: "0%" },
           "100%": { width: "100%" },
@@ -66,6 +71,7 @@ const config: Config = {
         "fade-in": "fade-in 0.5s ease-in-out",
         "shiny-text": "shiny-text 8s infinite",
         progress: "progress 8s cubic-bezier(0.4, 0, 0.2, 1) forwards",
+        "scale-in-out": "scale-in-out 0.5s ease-in-out",
       },
     },
   },

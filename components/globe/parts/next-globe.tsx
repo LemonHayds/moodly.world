@@ -16,8 +16,8 @@ import { GlobePopover } from "./globe-popover";
 
 export default function NextGlobe() {
   const globeEl = useRef<any>();
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   const {
@@ -61,22 +61,27 @@ export default function NextGlobe() {
       return;
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const newPosition = {
-        x: e.clientX,
-        y: e.clientY,
+    // Only apply tooltip on screens larger than mobile
+    if (window.innerWidth > 768) {
+      const handleMouseMove = (e: MouseEvent) => {
+        const newPosition = {
+          x: e.clientX,
+          y: e.clientY,
+        };
+
+        setTooltipPosition((prev) => {
+          if (!prev || prev.x !== newPosition.x || prev.y !== newPosition.y) {
+            return newPosition;
+          }
+          return prev;
+        });
       };
 
-      setTooltipPosition((prev) => {
-        if (!prev || prev.x !== newPosition.x || prev.y !== newPosition.y) {
-          return newPosition;
-        }
-        return prev;
-      });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mousemove", handleMouseMove);
+      return () => window.removeEventListener("mousemove", handleMouseMove);
+    } else {
+      setTooltipPosition(null);
+    }
   }, [selectedCountry, isModalOpen]);
 
   // Auto rotate control
@@ -96,7 +101,6 @@ export default function NextGlobe() {
     }
   }, [isHovering, globeSettings.spinningEnabled]);
 
-  // Every time globalMoods changes, generate new labels to display emojis on the globe
   useEffect(() => {
     if (!globeSettings.emojisEnabled) return;
 
@@ -141,7 +145,7 @@ export default function NextGlobe() {
     [selectedCountry, globeSettings.emojisEnabled]
   );
 
-  const handlePolygonHover = useCallback(async (polygon: any) => {
+  const handlePolygonHover = async (polygon: any) => {
     const countryPolygon = polygon as GlobePolygonType | null;
     if (countryPolygon?.properties?.ISO_A2) {
       document.body.style.cursor = "pointer";
@@ -153,16 +157,16 @@ export default function NextGlobe() {
     }
 
     setIsHovering(!!polygon);
-  }, []);
+  };
 
-  const handlePolygonClick = useCallback(() => {
+  const handlePolygonClick = () => {
     if (selectedCountry && !isModalOpen) {
       setIsModalOpen(true);
       document.body.style.cursor = "default";
     } else {
       setIsModalOpen(false);
     }
-  }, [selectedCountry, isModalOpen, setIsModalOpen]);
+  };
 
   // Add this new effect to handle dimensions
   useEffect(() => {

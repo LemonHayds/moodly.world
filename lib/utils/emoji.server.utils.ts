@@ -4,27 +4,34 @@ import { init } from "emoji-mart";
 import data from "@emoji-mart/data";
 import { unstable_cache } from "next/cache";
 
-const initializeEmojiData = () => {
-  let initialized = false;
-  return async () => {
-    if (!initialized) {
-      await init({ data });
-      initialized = true;
-    }
-  };
-};
+// Create a promise to track initialization
+let initializationPromise: Promise<void> | null = null;
 
-const initEmoji = initializeEmojiData();
+const initializeEmojiData = async () => {
+  if (!initializationPromise) {
+    initializationPromise = init({ data }).catch((error) => {
+      // Reset the promise if initialization fails
+      initializationPromise = null;
+      console.error("Failed to initialize emoji data:", error);
+      throw error;
+    });
+  }
+  return initializationPromise;
+};
 
 export const getEmojiById = (id: string) =>
   unstable_cache(
     async () => {
       try {
-        await initEmoji();
+        // Wait for initialization
+        await initializeEmojiData();
+
         //@ts-ignore
         const natives = data.natives;
         if (!natives) {
-          console.error("Emoji natives data is not available");
+          console.error(
+            "Emoji natives data is not available after initialization"
+          );
           return null;
         }
 
