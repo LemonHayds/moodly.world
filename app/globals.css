@@ -112,3 +112,12 @@ em-emoji-picker {
     @apply bg-background text-foreground;
   }
 }
+
+@supports (-webkit-touch-callout: none) {
+  .min-h-screen {
+    min-height: -webkit-fill-available;
+  }
+  .h-screen {
+    height: -webkit-fill-available;
+  }
+}

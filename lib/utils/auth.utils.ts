@@ -43,6 +43,12 @@ export async function signInWithOAuth(type: "x" | "google" | "facebook") {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: type === "x" ? "twitter" : type,
     options: {
+      redirectTo:
+        process.env.APP_ENV === "local"
+          ? "http://localhost:3000"
+          : process.env.APP_ENV === "staging"
+          ? process.env.VERCEL_URL
+          : "https://www.moodly.world",
       queryParams: {
         access_type: "offline",
         prompt: "consent",

@@ -10,7 +10,7 @@ const pacifico = Pacifico({
   subsets: ["latin"],
 });
 
-const MoodlyText = ({ children, className }: MoodlyTextProps) => {
+const MoodlyText = ({ children, className = "" }: MoodlyTextProps) => {
   return <div className={`${className} ${pacifico.className}`}>{children}</div>;
 };
 

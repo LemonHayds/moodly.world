@@ -79,12 +79,12 @@ export default function MoodBarChart() {
       ) : (
         <>
           {!chartConfig || Object?.keys(chartConfig)?.length === 0 ? (
-            <span className="flex items-center gap-2 opacity-50 mt-4">
-              No data here <Frown className="h-5 w-5" />
+            <span className="flex text-center w-full justify-center items-center gap-2 mt-4 text-muted-foreground text-sm opacity-50">
+              No data here (yet)
             </span>
           ) : (
             <>
-              <ChartContainer config={chartConfig}>
+              <ChartContainer className="h-[200px]" config={chartConfig}>
                 <BarChart
                   data={chartData}
                   layout="vertical"
@@ -98,6 +98,9 @@ export default function MoodBarChart() {
                     height: "100%",
                     width: "100%",
                   }}
+                  barGap={0}
+                  barCategoryGap={0}
+                  barSize={30}
                 >
                   <YAxis
                     dataKey="mood"

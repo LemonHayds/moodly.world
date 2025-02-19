@@ -4,6 +4,7 @@ import { createClient } from "./supabase/server";
 import { getEmojiById } from "./emoji.server.utils";
 import { ONE_DAY_MILLISECONDS } from "../contants";
 import { revalidateTag, unstable_cache } from "next/cache";
+import { createServiceClient } from "./supabase/service-role";
 
 import type { GeoLocationType } from "../types/geo-location.types";
 import type { TimePeriodType } from "../types/filter-time-periods.types";
@@ -168,6 +169,7 @@ export async function fetchUserMoodLogs(
   selectedCountry: string
 ) {
   const supabase = createClient();
+  const serviceClient = createServiceClient();
 
   return unstable_cache(
     async () => {
@@ -209,17 +211,26 @@ export async function fetchUserMoodLogs(
         .range(from, to);
 
       if (error) {
+        console.log(error);
         return {
           success: false,
           error: error.message,
         };
       }
 
+      // Map logs with user data using service client
       const logsWithEmoji = await Promise.all(
-        logs?.map(async (log) => ({
-          ...log,
-          emoji: await getEmojiById(log.mood_id),
-        })) || []
+        logs?.map(async (log) => {
+          const {
+            data: { user },
+          } = await serviceClient.auth.admin.getUserById(log.user_id);
+
+          return {
+            ...log,
+            emoji: await getEmojiById(log.mood_id),
+            full_name: user?.user_metadata?.full_name || "Anonymous",
+          };
+        }) || []
       );
 
       return {

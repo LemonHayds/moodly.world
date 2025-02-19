@@ -13,10 +13,10 @@ const SlidingTabs = (props: {
 }) => {
   const {
     tabs,
-    className,
+    className = "",
     activeTab,
     setActiveTab,
-    tabClassName,
+    tabClassName = "",
     indicatorIsLine = false,
     customInitialClassName,
   } = props;
@@ -90,7 +90,8 @@ const SlidingTabs = (props: {
           >
             <span
               className={`
-            relative z-10 text-xs sm:text-sm font-medium px-2 transition-colors duration-300 ease-in-out
+            relative z-10 font-medium px-2 transition-colors duration-300 ease-in-out
+            ${indicatorIsLine ? "text-sm" : "text-xs sm:text-sm"}
             ${
               activeTab !== tab.value
                 ? "group-hover:text-black group-hover:dark:text-white"

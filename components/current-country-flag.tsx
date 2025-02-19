@@ -10,7 +10,7 @@ const CurrentCountryFlag = () => {
   if (!geoData?.country) return null;
   return (
     <div
-      className="select-none text-2xl pointer-events-auto opacity-75"
+      className="mx-auto mb-2 text-xl sm:mx-0 sm:mb-0  select-none sm:text-2xl pointer-events-auto opacity-75"
       aria-label={`Your country: ${getCountryName(geoData?.country)}`}
       title={`Your country: ${getCountryName(geoData?.country)}`}
     >

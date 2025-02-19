@@ -5,7 +5,7 @@ import { BorderBeam } from "@stianlarsen/border-beam";
 import EmojiPicker from "./emoji-picker";
 import AnimatedShinyText from "./ui/animated-shiny-text";
 import { useMoodLog } from "./providers/mood-log-provider/mood-log-client-provider";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useGeo } from "./providers/geo-provider/geo-client-provider";
 import toast from "react-hot-toast";
 import { TOAST_CLASSNAMES } from "../lib/contants";
@@ -13,10 +13,12 @@ import { ChevronDown } from "lucide-react";
 import { storeMoodLogServer } from "../lib/utils/mood-log.utils";
 
 import ExpandableTextArea from "./expandable-text-area";
+import { useGlobeAnalytics } from "./providers/globe-analytics-provider/globe-analytics-client-provider";
 
 const MoodLogger = (props: { className?: string }) => {
   const { className = "" } = props;
 
+  const { refetchCountryMoods } = useGlobeAnalytics();
   const { latestMoodLog, setLatestMoodLog } = useMoodLog();
 
   const [shouldAnimate, setShouldAnimate] = useState(false);
@@ -42,52 +44,50 @@ const MoodLogger = (props: { className?: string }) => {
     }
   }, [selectedMoodId]);
 
-  const handleStoreMoodLog = useCallback(
-    async (moodId: string) => {
-      const toastId = toast.loading("Logging", {
-        id: "mood_log",
-        className: TOAST_CLASSNAMES,
-      });
+  const handleStoreMoodLog = async (moodId: string) => {
+    const toastId = toast.loading("Logging", {
+      id: "mood_log",
+      className: TOAST_CLASSNAMES,
+    });
 
-      if (!selectedMoodId) {
-        toast.error("No mood selected", { id: toastId });
-        return;
-      }
+    if (!selectedMoodId) {
+      toast.error("No mood selected", { id: toastId });
+      return;
+    }
 
-      if (!moodContent) {
-        toast.error("No mood content", { id: toastId });
-        return;
-      }
+    if (!moodContent) {
+      toast.error("No mood content", { id: toastId });
+      return;
+    }
 
-      const previousMoodId = selectedMoodId;
+    const previousMoodId = selectedMoodId;
 
-      try {
-        const response = await storeMoodLogServer(moodId, geoData, moodContent);
+    try {
+      const response = await storeMoodLogServer(moodId, geoData, moodContent);
 
-        if (response.success && response.log) {
-          setLatestMoodLog(response);
-          setIsHovering(false);
-          setPickerExpanded(false);
-          toast.success(
-            <div className="flex items-center gap-2">
-              Mood logged:
-              <span className="text-xl">{response.log.emoji}</span>
-            </div>,
-            { id: toastId }
-          );
-        } else {
-          setSelectedMoodId(previousMoodId);
-          throw new Error(response.error || "Failed to log mood");
-        }
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "An error occurred";
-        toast.error(errorMessage, { id: toastId });
+      if (response.success && response.log) {
+        setLatestMoodLog(response);
+        setIsHovering(false);
+        setPickerExpanded(false);
+        toast.success(
+          <div className="flex items-center gap-2">
+            Mood logged:
+            <span className="text-xl">{response.log.emoji}</span>
+          </div>,
+          { id: toastId }
+        );
+        refetchCountryMoods();
+      } else {
         setSelectedMoodId(previousMoodId);
+        throw new Error(response.error || "Failed to log mood");
       }
-    },
-    [moodContent, selectedMoodId, geoData, setLatestMoodLog]
-  );
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An error occurred";
+      toast.error(errorMessage, { id: toastId });
+      setSelectedMoodId(previousMoodId);
+    }
+  };
 
   return (
     <div

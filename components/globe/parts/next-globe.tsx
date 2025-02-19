@@ -61,22 +61,27 @@ export default function NextGlobe() {
       return;
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const newPosition = {
-        x: e.clientX,
-        y: e.clientY,
+    // Only apply tooltip on screens larger than mobile
+    if (window.innerWidth > 768) {
+      const handleMouseMove = (e: MouseEvent) => {
+        const newPosition = {
+          x: e.clientX,
+          y: e.clientY,
+        };
+
+        setTooltipPosition((prev) => {
+          if (!prev || prev.x !== newPosition.x || prev.y !== newPosition.y) {
+            return newPosition;
+          }
+          return prev;
+        });
       };
 
-      setTooltipPosition((prev) => {
-        if (!prev || prev.x !== newPosition.x || prev.y !== newPosition.y) {
-          return newPosition;
-        }
-        return prev;
-      });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mousemove", handleMouseMove);
+      return () => window.removeEventListener("mousemove", handleMouseMove);
+    } else {
+      setTooltipPosition(null);
+    }
   }, [selectedCountry, isModalOpen]);
 
   // Auto rotate control
@@ -155,7 +160,6 @@ export default function NextGlobe() {
   };
 
   const handlePolygonClick = () => {
-    console.log("clicked");
     if (selectedCountry && !isModalOpen) {
       setIsModalOpen(true);
       document.body.style.cursor = "default";

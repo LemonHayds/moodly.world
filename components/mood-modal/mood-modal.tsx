@@ -18,6 +18,7 @@ const MoodModal = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setActiveTab("mood-distribution");
@@ -78,18 +79,18 @@ const MoodModal = () => {
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             customInitialClassName="w-1/2"
-            className="-mt-4 -ml-2 mr-6 mb-4"
+            className="-mt-4 -ml-2 mr-6 mb-0"
             tabClassName="w-1/2"
           />
         </>
       }
       setIsOpen={() => setIsModalOpen(!isModalOpen)}
-      className="sm:max-w-[370px] pb-0"
+      className="w-[400px] pb-0"
       contents={
         <div className="min-h-[200px] -mt-4">
           {activeTab === "mood-distribution" ? (
-            <div className="pb-6">
-              <div className="leading-[1.35] mb-2 font-semibold">
+            <div className="pb-6 pt-4">
+              <div className="leading-[1.35] mb-2 font-semibold text-lg">
                 Mood distribution in the last{" "}
                 {activeFilter === "1hr"
                   ? "hour"
@@ -97,11 +98,11 @@ const MoodModal = () => {
                   ? "24 hours"
                   : activeFilter}
               </div>
-              <span className="leading-[1.35] flex items-center gap-2 pb-2">
-                <span className="text-md">
+              <span className="leading-[1.35] flex items-center gap-2 pb-3">
+                <span className="text-[20px]">
                   {getCountryFlag(selectedCountry || " ")}
                 </span>
-                <span className="text-sm">
+                <span className="text-md">
                   {getCountryName(selectedCountry || " ")}
                 </span>
               </span>
@@ -112,9 +113,23 @@ const MoodModal = () => {
             </div>
           ) : (
             <div
-              className="space-y-4 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300"
+              className="pt-3 space-y-4 max-h-[400px] overflow-y-auto pr-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-300"
               onScroll={handleScroll}
             >
+              <div className="-mb-3">
+                <div className="leading-[1.35] mb-2 font-semibold text-lg">
+                  Latest mood logs
+                </div>
+                <span className="leading-[1.35] flex items-center gap-2 pb-3">
+                  <span className="text-[20px]">
+                    {getCountryFlag(selectedCountry || " ")}
+                  </span>
+                  <span className="text-md">
+                    {getCountryName(selectedCountry || " ")}
+                  </span>
+                </span>
+              </div>
+
               {logs.map((log, index) => (
                 <div
                   key={`${log.id}-${index}`}
@@ -141,13 +156,13 @@ const MoodModal = () => {
                   </div>
                 )}
                 {!isLoading && !hasMore && logs.length > 0 && (
-                  <div className="text-center text-sm text-muted-foreground py-4">
+                  <div className="text-center text-sm opacity-50 text-muted-foreground py-4">
                     No more logs to load
                   </div>
                 )}
                 {!isLoading && logs.length === 0 && (
-                  <div className="text-center text-muted-foreground">
-                    No logs found for this time period
+                  <div className="text-center text-muted-foreground opacity-50 text-sm">
+                    No logs found
                   </div>
                 )}
               </div>
