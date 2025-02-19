@@ -102,12 +102,16 @@ export default function NextGlobe() {
   }, [isHovering, globeSettings.spinningEnabled]);
 
   useEffect(() => {
-    if (!globeSettings.emojisEnabled) return;
+    if (!globeSettings.emojisEnabled) {
+      return;
+    } else {
+      let labels = null;
 
-    if (globalMoods) {
-      const labels = generateGlobeLabels(globalMoods);
+      if (globalMoods) {
+        labels = generateGlobeLabels(globalMoods);
+      }
 
-      setCountryMoodLabels(labels);
+      setCountryMoodLabels(labels || []);
 
       const timer = setTimeout(() => {
         setShowCountryMoodLabels(true);
