@@ -183,7 +183,7 @@ export const fetchGlobalMoodsByTimePeriod = cache(
         if (globalMoods && Object?.keys(globalMoods)?.length > 0) {
           return globalMoods;
         } else {
-          revalidateTag(revalidateTagKey);
+          // revalidateTag(revalidateTagKey);
         }
 
         attempts++;
@@ -384,7 +384,7 @@ export async function fetchCountryMoodsByTimePeriod(
         if (withDelay) {
           await new Promise((resolve) => setTimeout(resolve, 1000));
         }
-        revalidateTag(revalidateTagKey);
+        // revalidateTag(revalidateTagKey);
       }
 
       attempts++;
